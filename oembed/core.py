@@ -172,7 +172,7 @@ def replace(text, max_width=MAX_WIDTH, max_height=MAX_HEIGHT):
                             max_height = max_height,
                             html = replacement,
                         )
-                    stored[stored_embed.match] = stored_embed
+                        stored[stored_embed.match] = stored_embed
                     parts[id_to_replace] = replacement
                 else:
                     raise ValueError
