@@ -164,13 +164,14 @@ def replace(text, max_width=MAX_WIDTH, max_height=MAX_HEIGHT):
                 # Depending on the embed type, grab the associated template and
                 # pass it the parsed JSON response as context.
                 replacement = render_to_string('oembed/%s.html' % resp['type'], {'response': resp})
-                if replacement and rule.cache:
-                    stored_embed = StoredOEmbed.objects.create(
-                        match = part,
-                        max_width = max_width,
-                        max_height = max_height,
-                        html = replacement,
-                    )
+                if replacement:
+                    if rule.cache:
+                        stored_embed = StoredOEmbed.objects.create(
+                            match = part,
+                            max_width = max_width,
+                            max_height = max_height,
+                            html = replacement,
+                        )
                     stored[stored_embed.match] = stored_embed
                     parts[id_to_replace] = replacement
                 else:
