@@ -111,7 +111,7 @@ def replace(text, max_width=MAX_WIDTH, max_height=MAX_HEIGHT):
     These templates are passed a context variable, ``response``, which is a 
     dictionary representation of the response.
     """
-    rules = list(ProviderRule.objects.all())
+    rules = list(ProviderRule.objects.filter(activate=True))
     patterns = [re.compile(r.regex, re.I) for r in rules] # Compiled patterns from the rules
     parts = [] # The parts that we will assemble into the final return value.
     indices = [] # List of indices of parts that need to be replaced with OEmbed stuff.

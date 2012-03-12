@@ -15,6 +15,7 @@ class ProviderRule(models.Model):
     endpoint = models.CharField(_("endpoint"), max_length=2000)
     format = models.IntegerField(_("format"), choices=FORMAT_CHOICES)
     cache = models.BooleanField(default=True)
+    activate = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.name or self.endpoint
