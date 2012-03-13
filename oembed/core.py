@@ -18,7 +18,7 @@ from django.template.loader import render_to_string
 import logging
 logger = logging.getLogger("oembed core")
 
-END_OVERRIDES = (')', ',', '.', '>', ']', ';')
+END_OVERRIDES = (')', ',', '.','>', ']', ';')
 MAX_WIDTH = getattr(settings, "OEMBED_MAX_WIDTH", 320)
 MAX_HEIGHT = getattr(settings, "OEMBED_MAX_HEIGHT", 240)
 FORMAT = getattr(settings, "OEMBED_FORMAT", "json")
@@ -127,11 +127,15 @@ def replace(text, max_width=MAX_WIDTH, max_height=MAX_HEIGHT):
         else:
             to_append = ""
             # If the link ends with one of our overrides, build a list
-            while part[-1] in END_OVERRIDES:
+	    pat = re.compile('(.*)</.*>') # fix for wysiwyg editors
+	    m = pat.match(part)
+	    if m:	
+		part = m.group(1) 
+	    while part[-1] in END_OVERRIDES:
                 to_append += part[-1]
                 part = part[:-1]
             indices.append(index)
-            urls.add(part)
+	    urls.add(part)
             indices_rules.append(i)
             parts.append(part)
             index += 1
@@ -159,7 +163,7 @@ def replace(text, max_width=MAX_WIDTH, max_height=MAX_HEIGHT):
                                "maxheight": max_height,
                                "format": FORMAT})
                 url = u"%s%s%s" % (rule.endpoint, sep, q)
-                # Fetch the link and parse the JSON.
+		# Fetch the link and parse the JSON.
                 resp = simplejson.loads(fetch(url))
                 # Depending on the embed type, grab the associated template and
                 # pass it the parsed JSON response as context.
